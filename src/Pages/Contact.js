@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PizzaLeft from "../assets/pizzaLeft.jpg";
 import "../styles/Contact.css";
+
 function Contact() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -17,46 +18,68 @@ function Contact() {
   });
 
   const handleChange = (e) => {
-
-
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: "",
-    }));
+    if (name == "name" && value.length > 0 && value.length < 4) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "Name must be at least 4 characters",
+      }));
+    } else if (name == "email") {
+      const Regexp = /[a-zA-Z0-9]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
+      if (!value || !Regexp.test(value)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "Invalid Email Address",
+        }));
+      } else {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          [name]: "",
+        }));
+      }
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: "",
+      }));
+    }
+    
   };
+  //     setErrors((prevErrors) => ({
+  //       ...prevErrors,
+  //       [name]: "",
+  //     }));
+  //   };
 
   const handleSubmit = (e) => {
- 
     e.preventDefault();
 
     const newErrors = {};
 
     if (!formData.name || formData.name.length < 3) {
       newErrors.name = "name must be at least 3 characters";
-    //   alert("name must be at least 3 characters");
+      //   alert("name must be at least 3 characters");
     }
-    const RegEx =  /[a-zA-Z0-9]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
+    const RegEx = /[a-zA-Z0-9]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
     if (!formData.email || !RegEx.test(formData.email)) {
       newErrors.email = " Invalid Email Address";
-    //   alert("Correct Regular Expression is required");
+      //   alert("Correct Regular Expression is required");
     }
     if (!formData.message) {
       newErrors.message = "Message is required";
-    //   alert("message should be written");
+      //   alert("message should be written");
     }
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length === 0) {
       console.log("Form Data:", formData);
-    //   alert("Form is submitted");
-    navigate('/')
+      //   alert("Form is submitted");
+      navigate("/");
     }
   };
 
@@ -70,7 +93,6 @@ function Contact() {
         <h1> Contact Us</h1>
 
         <form id="contact-form" onSubmit={handleSubmit}>
-            
           <label htmlFor="name">Full Name</label>
           <input
             name="name"
@@ -97,7 +119,7 @@ function Contact() {
             onChange={handleChange}
           />
           {errors.message && <p className="error"> {errors.message}</p>}
-          <button type="submit" onSubmit={handleSubmit}  > Send Message</button>
+          <button type="submit">Send Message</button>
         </form>
       </div>
     </div>
