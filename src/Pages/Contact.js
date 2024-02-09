@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PizzaLeft from "../assets/pizzaLeft.jpg";
 import "../styles/Contact.css";
 function Contact() {
+    const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,6 +17,8 @@ function Contact() {
   });
 
   const handleChange = (e) => {
+
+
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -28,6 +32,7 @@ function Contact() {
   };
 
   const handleSubmit = (e) => {
+ 
     e.preventDefault();
 
     const newErrors = {};
@@ -51,6 +56,7 @@ function Contact() {
     if (Object.keys(newErrors).length === 0) {
       console.log("Form Data:", formData);
     //   alert("Form is submitted");
+    navigate('/')
     }
   };
 
@@ -91,7 +97,7 @@ function Contact() {
             onChange={handleChange}
           />
           {errors.message && <p className="error"> {errors.message}</p>}
-          <button type="submit"> Send Message</button>
+          <button type="submit" onSubmit={handleSubmit}  > Send Message</button>
         </form>
       </div>
     </div>
